@@ -1,1270 +1,218 @@
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday, Akshata</title>
+<meta name="description" content="A little something for Akshata's birthday.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/DrawSVGPlugin.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --gold: #c9a84c;
-    --gold-light: #f0d080;
-    --gold-pale: #fff3c4;
-    --rose: #c87a8a;
-    --rose-dark: #8b3a52;
-    --peony: #d4a0b0;
-    --cream: #f5ede0;
-    --ink: #0a0608;
-    --moonlight: #e8e0f0;
+  :root{
+    --ink: #0a0d18;
+    --ink-deep: #05060c;
+    --panel: #12162a;
+    --parchment: #f6eee0;
+    --parchment-dim: #ece1cd;
+    --gold: #c9a24b;
+    --gold-soft: #e6cd8f;
+    --ember: #a85a3f;
+    --ember-dark: #7c3f2b;
+    --text-soft: #cfc9bd;
+    --text-faint: #8b8879;
+    --serif-display: "Fraunces", serif;
+    --serif-note: "Cormorant Garamond", serif;
+    --sans: "Inter", sans-serif;
   }
 
-  html, body {
-    width: 100%; height: 100%;
-    background: #000;
-    overflow: hidden;
-    font-family: 'Cormorant Garamond', serif;
-    cursor: none;
-    -webkit-font-smoothing: antialiased;
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--ink);
+    color: var(--text-soft);
+    font-family: var(--sans);
+    overflow-x: hidden;
   }
 
-  /* CUSTOM CURSOR */
-  #cursor {
-    position: fixed;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(249,230,160,0.95) 0%, rgba(201,168,76,0.4) 60%, transparent 100%);
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    mix-blend-mode: screen;
-    filter: blur(1px);
-    transition: width 0.2s, height 0.2s;
-  }
-  #cursor-glow {
-    position: fixed;
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    filter: blur(8px);
-  }
-
-  /* MAIN STAGE */
-  #stage {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 30%, #0d0810 0%, #060408 50%, #000 100%);
-  }
-
-  /* STAR CANVAS */
-  #star-canvas {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-  }
-
-  /* MOON */
-  #moon {
-    position: absolute;
-    top: 8%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px; height: 100px;
-    opacity: 0;
-  }
-  #moon-glow {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(220,210,255,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  /* FAIRY */
-  #fairy-container {
-    position: absolute;
-    width: 0; height: 0;
-    pointer-events: none;
-    z-index: 100;
-    opacity: 0;
-  }
-  #fairy {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    width: 16px; height: 16px;
-  }
-  .fairy-glow {
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #fff9d0 0%, #f0d080 40%, rgba(240,208,128,0) 100%);
-    filter: blur(2px);
-    animation: fairyPulse 1.2s ease-in-out infinite alternate;
-    box-shadow: 0 0 20px 6px rgba(240,208,128,0.5), 0 0 40px 12px rgba(240,208,128,0.2);
-  }
-  @keyframes fairyPulse {
-    from { transform: scale(0.9); opacity: 0.8; }
-    to   { transform: scale(1.15); opacity: 1; }
-  }
-
-  /* PARTICLE CANVAS */
-  #particle-canvas {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 50;
-  }
-
-  /* GROUND GLOW */
-  #ground-glow {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 280px;
-    background: linear-gradient(to top, rgba(201,168,76,0.04) 0%, transparent 100%);
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* BOUQUET CONTAINER */
-  #bouquet-wrap {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 420px;
-    height: 520px;
-    opacity: 0;
-    pointer-events: none;
-  }
-  #bouquet-svg {
-    width: 100%; height: 100%;
-    overflow: visible;
-  }
-
-  /* TEXT STAGE */
-  #text-stage {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 200;
-    padding-top: 0;
-  }
-  #pen-svg-wrap {
-    position: absolute;
-    pointer-events: none;
-    z-index: 210;
-    opacity: 0;
-  }
-  #hb-svg { display: block; opacity: 0; overflow: visible; }
-  #name-svg { display: block; opacity: 0; overflow: visible; margin-top: 12px; }
-
-  /* ENVELOPE SECTION */
-  #envelope-section {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 300;
-  }
-  #envelope-wrap {
+  body{
+    min-height: 100vh;
+    min-height: 100svh;
     position: relative;
-    width: 380px;
-    height: 260px;
-    cursor: pointer;
-  }
-  #env-svg { width: 100%; height: 100%; overflow: visible; }
-
-  #letter-wrap {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) scaleY(0);
-    transform-origin: top center;
-    width: 340px;
-    background: linear-gradient(160deg, #fdf8f0 0%, #f8f0e4 100%);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 2px;
-    padding: 40px 36px;
-    box-shadow:
-      0 30px 80px rgba(0,0,0,0.6),
-      0 0 0 1px rgba(201,168,76,0.1),
-      inset 0 0 40px rgba(201,168,76,0.05);
-    opacity: 0;
-    pointer-events: none;
-  }
-  #letter-wrap::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity: 0.6;
-  }
-  #letter-inner {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px;
-    line-height: 1.9;
-    color: #3a2a20;
-    font-weight: 300;
-    font-style: italic;
-    white-space: pre-wrap;
-  }
-  #letter-cursor {
-    display: inline-block;
-    width: 1px; height: 1em;
-    background: var(--gold);
-    margin-left: 2px;
-    vertical-align: text-bottom;
-    animation: blink 0.7s step-end infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-
-  #click-hint {
-    position: absolute;
-    bottom: -44px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
-    letter-spacing: 0.2em;
-    color: rgba(201,168,76,0.7);
-    text-transform: uppercase;
-    white-space: nowrap;
-    animation: hintFloat 2s ease-in-out infinite alternate;
-  }
-  @keyframes hintFloat {
-    from { opacity: 0.5; transform: translateX(-50%) translateY(0); }
-    to   { opacity: 1;   transform: translateX(-50%) translateY(-4px); }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 5vw;
+    text-align: center;
   }
 
-  /* PETALS */
-  .petal {
-    position: absolute;
-    pointer-events: none;
-    z-index: 60;
-    opacity: 0;
-  }
-
-  /* FIREFLY */
-  .firefly {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 55;
-  }
-
-  /* AMBIENT LIGHT */
-  #ambient {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
-  }
-  .amb-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0;
-  }
-
-  /* PARALLAX LAYER */
-  #parallax-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  /* RIBBON SVG */
-  #ribbon-path { opacity: 0; }
-
-  /* SPARKLE */
-  .sparkle {
-    position: absolute;
-    pointer-events: none;
-    z-index: 150;
-    animation: sparkleFade 0.8s ease-out forwards;
-  }
-  @keyframes sparkleFade {
-    0%   { transform: scale(0) rotate(0deg); opacity: 1; }
-    60%  { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
-    100% { transform: scale(0.3) rotate(360deg); opacity: 0; }
-  }
-
-  /* FADE OVERLAY */
-  #fade-overlay {
+  /* ---------- Ambient starfield ---------- */
+  #stars{
     position: fixed;
     inset: 0;
-    background: #000;
-    z-index: 9990;
+    z-index: 0;
     pointer-events: none;
   }
-
-  @media (max-width: 600px) {
-    #bouquet-wrap { width: 300px; height: 380px; }
-    #envelope-wrap { width: 300px; height: 200px; }
-    #letter-wrap { width: 280px; padding: 28px 22px; }
-    #letter-inner { font-size: 14px; }
-    #moon { width: 70px; height: 70px; }
+  .star{
+    position: absolute;
+    background: var(--gold-soft);
+    border-radius: 50%;
+    opacity: 0.35;
+    animation: twinkle ease-in-out infinite;
   }
-</style>
-</head>
-<body>
-
-<div id="cursor"></div>
-<div id="cursor-glow"></div>
-<div id="fade-overlay"></div>
-
-<div id="stage">
-
-  <canvas id="star-canvas"></canvas>
-
-  <div id="ambient">
-    <div class="amb-blob" id="amb1" style="width:500px;height:500px;top:-100px;left:-100px;background:radial-gradient(circle,rgba(120,80,180,0.06),transparent)"></div>
-    <div class="amb-blob" id="amb2" style="width:400px;height:400px;top:20%;right:-80px;background:radial-gradient(circle,rgba(200,120,140,0.05),transparent)"></div>
-    <div class="amb-blob" id="amb3" style="width:600px;height:300px;bottom:-80px;left:10%;background:radial-gradient(ellipse,rgba(201,168,76,0.06),transparent)"></div>
-  </div>
-
-  <div id="parallax-layer"></div>
-
-  <!-- MOON -->
-  <div id="moon">
-    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="moonGrad" cx="40%" cy="38%" r="55%">
-          <stop offset="0%" stop-color="#f0ead8"/>
-          <stop offset="60%" stop-color="#d4c9b0"/>
-          <stop offset="100%" stop-color="#a89880"/>
-        </radialGradient>
-        <filter id="moonBloom" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="rgba(220,210,255,0.15)"/>
-          <stop offset="100%" stop-color="transparent"/>
-        </radialGradient>
-      </defs>
-      <circle cx="50" cy="50" r="48" fill="url(#moonGlow)" opacity="1"/>
-      <circle cx="50" cy="50" r="34" fill="url(#moonGrad)" filter="url(#moonBloom)"/>
-      <circle cx="38" cy="36" r="4" fill="rgba(255,255,255,0.08)"/>
-      <circle cx="62" cy="58" r="5.5" fill="rgba(0,0,0,0.06)"/>
-      <circle cx="44" cy="62" r="3" fill="rgba(0,0,0,0.04)"/>
-    </svg>
-    <div id="moon-glow"></div>
-  </div>
-
-  <!-- FAIRY -->
-  <div id="fairy-container">
-    <div id="fairy">
-      <div class="fairy-glow"></div>
-    </div>
-  </div>
-
-  <!-- PARTICLE CANVAS for sparkle dust -->
-  <canvas id="particle-canvas"></canvas>
-
-  <!-- GROUND GLOW -->
-  <div id="ground-glow"></div>
-
-  <!-- BOUQUET -->
-  <div id="bouquet-wrap">
-    <svg id="bouquet-svg" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- Rose gradient -->
-        <radialGradient id="roseGrad1" cx="50%" cy="40%" r="55%">
-          <stop offset="0%" stop-color="#f0b8c8"/>
-          <stop offset="50%" stop-color="#d47090"/>
-          <stop offset="100%" stop-color="#9e3058"/>
-        </radialGradient>
-        <radialGradient id="roseGrad2" cx="45%" cy="35%" r="60%">
-          <stop offset="0%" stop-color="#f5c0d0"/>
-          <stop offset="100%" stop-color="#b84070"/>
-        </radialGradient>
-        <!-- Peony gradient -->
-        <radialGradient id="peonyGrad" cx="50%" cy="45%" r="55%">
-          <stop offset="0%" stop-color="#fde8f0"/>
-          <stop offset="60%" stop-color="#e8a8c0"/>
-          <stop offset="100%" stop-color="#c07090"/>
-        </radialGradient>
-        <!-- Daisy gradient -->
-        <radialGradient id="daisyGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#fff8e8"/>
-          <stop offset="100%" stop-color="#f0e0c0"/>
-        </radialGradient>
-        <!-- Tulip gradient -->
-        <radialGradient id="tulipGrad" cx="50%" cy="30%" r="65%">
-          <stop offset="0%" stop-color="#f8d0e0"/>
-          <stop offset="100%" stop-color="#c06080"/>
-        </radialGradient>
-        <!-- Leaf gradient -->
-        <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#5a8a50"/>
-          <stop offset="100%" stop-color="#3a6030"/>
-        </linearGradient>
-        <linearGradient id="leafGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#6a9e60"/>
-          <stop offset="100%" stop-color="#4a7040"/>
-        </linearGradient>
-        <!-- Stem gradient -->
-        <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#4a6a40"/>
-          <stop offset="50%" stop-color="#6a9a58"/>
-          <stop offset="100%" stop-color="#4a6a40"/>
-        </linearGradient>
-        <!-- Ribbon -->
-        <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#e8c870"/>
-          <stop offset="40%" stop-color="#c9a84c"/>
-          <stop offset="100%" stop-color="#a07830"/>
-        </linearGradient>
-        <!-- Glow filter -->
-        <filter id="flowerGlow" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="1.5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      <!-- STEMS GROUP -->
-      <g id="g-stems" opacity="0">
-        <!-- stem1 center rose -->
-        <line class="stem" x1="210" y1="480" x2="210" y2="290" stroke="url(#stemGrad)" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- stem2 left peony -->
-        <path class="stem" d="M 190 480 C 185 440 175 380 165 310" stroke="url(#stemGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <!-- stem3 right peony -->
-        <path class="stem" d="M 225 480 C 240 440 255 380 262 310" stroke="url(#stemGrad)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <!-- stem4 far left rose -->
-        <path class="stem" d="M 195 480 C 180 450 155 400 130 330" stroke="url(#stemGrad)" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- stem5 far right rose -->
-        <path class="stem" d="M 220 480 C 250 450 275 400 295 335" stroke="url(#stemGrad)" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- stem6 tulip left -->
-        <path class="stem" d="M 200 480 C 175 455 148 415 142 350" stroke="url(#stemGrad)" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- stem7 tulip right -->
-        <path class="stem" d="M 215 480 C 245 455 278 415 282 348" stroke="url(#stemGrad)" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- stem8 daisy left -->
-        <path class="stem" d="M 205 480 C 178 460 148 428 118 368" stroke="url(#stemGrad)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <!-- stem9 daisy right -->
-        <path class="stem" d="M 215 480 C 248 460 282 428 304 372" stroke="url(#stemGrad)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <!-- stem10 small filler -->
-        <path class="stem" d="M 208 480 C 195 460 185 440 175 400" stroke="url(#stemGrad)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <path class="stem" d="M 212 480 C 228 460 242 438 252 398" stroke="url(#stemGrad)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      </g>
-
-      <!-- LEAVES GROUP -->
-      <g id="g-leaves" opacity="0">
-        <!-- Leaf on center stem -->
-        <g class="leaf" transform-origin="210 380" style="transform-origin:210px 380px">
-          <path d="M 210 380 C 190 360 178 340 185 320 C 195 340 205 360 210 380 Z" fill="url(#leafGrad)" opacity="0.9"/>
-        </g>
-        <g class="leaf" transform-origin="210 400" style="transform-origin:210px 400px">
-          <path d="M 210 400 C 232 378 244 356 236 334 C 224 356 214 378 210 400 Z" fill="url(#leafGrad2)" opacity="0.85"/>
-        </g>
-        <!-- Leaf on left stem -->
-        <g class="leaf">
-          <path d="M 172 370 C 152 352 143 332 152 312 C 162 334 170 354 172 370 Z" fill="url(#leafGrad)" opacity="0.88"/>
-        </g>
-        <!-- Leaf on right stem -->
-        <g class="leaf">
-          <path d="M 258 370 C 278 352 287 332 278 312 C 268 334 260 354 258 370 Z" fill="url(#leafGrad2)" opacity="0.88"/>
-        </g>
-        <!-- More leaves -->
-        <g class="leaf">
-          <path d="M 135 360 C 118 342 112 320 122 300 C 130 322 134 344 135 360 Z" fill="url(#leafGrad)" opacity="0.8"/>
-        </g>
-        <g class="leaf">
-          <path d="M 290 362 C 308 344 313 322 302 302 C 294 324 290 346 290 362 Z" fill="url(#leafGrad2)" opacity="0.8"/>
-        </g>
-      </g>
-
-      <!-- FLOWERS GROUP (blooms on top) -->
-      <g id="g-flowers">
-
-        <!-- ROSE 1 - Center (large, red-pink) -->
-        <g class="flower" id="fl1" transform="translate(210,290)" opacity="0" style="transform-origin:0px 0px">
-          <g filter="url(#flowerGlow)">
-            <!-- Outer petals -->
-            <ellipse rx="22" ry="14" cx="0" cy="-8" fill="#c05878" opacity="0.7" transform="rotate(-30)"/>
-            <ellipse rx="22" ry="14" cx="0" cy="-8" fill="#c05878" opacity="0.7" transform="rotate(30)"/>
-            <ellipse rx="22" ry="14" cx="0" cy="-8" fill="#c05878" opacity="0.7" transform="rotate(90)"/>
-            <ellipse rx="22" ry="14" cx="0" cy="-8" fill="#c05878" opacity="0.7" transform="rotate(150)"/>
-            <ellipse rx="22" ry="14" cx="0" cy="-8" fill="#c05878" opacity="0.7" transform="rotate(210)"/>
-            <ellipse rx="22" ry="14" cx="0" cy="-8" fill="#c05878" opacity="0.7" transform="rotate(270)"/>
-            <!-- Mid petals -->
-            <ellipse rx="17" ry="11" cx="0" cy="-7" fill="#d4708a" opacity="0.85" transform="rotate(0)"/>
-            <ellipse rx="17" ry="11" cx="0" cy="-7" fill="#d4708a" opacity="0.85" transform="rotate(60)"/>
-            <ellipse rx="17" ry="11" cx="0" cy="-7" fill="#d4708a" opacity="0.85" transform="rotate(120)"/>
-            <ellipse rx="17" ry="11" cx="0" cy="-7" fill="#d4708a" opacity="0.85" transform="rotate(180)"/>
-            <ellipse rx="17" ry="11" cx="0" cy="-7" fill="#d4708a" opacity="0.85" transform="rotate(240)"/>
-            <ellipse rx="17" ry="11" cx="0" cy="-7" fill="#d4708a" opacity="0.85" transform="rotate(300)"/>
-            <!-- Inner petals -->
-            <ellipse rx="12" ry="8" cx="0" cy="-5" fill="#e890a8" opacity="0.9" transform="rotate(20)"/>
-            <ellipse rx="12" ry="8" cx="0" cy="-5" fill="#e890a8" opacity="0.9" transform="rotate(80)"/>
-            <ellipse rx="12" ry="8" cx="0" cy="-5" fill="#e890a8" opacity="0.9" transform="rotate(140)"/>
-            <ellipse rx="12" ry="8" cx="0" cy="-5" fill="#e890a8" opacity="0.9" transform="rotate(200)"/>
-            <ellipse rx="12" ry="8" cx="0" cy="-5" fill="#e890a8" opacity="0.9" transform="rotate(260)"/>
-            <ellipse rx="12" ry="8" cx="0" cy="-5" fill="#e890a8" opacity="0.9" transform="rotate(320)"/>
-            <!-- Center -->
-            <circle r="8" fill="url(#roseGrad1)"/>
-            <circle r="4" fill="#f0b8c8" opacity="0.6"/>
-          </g>
-        </g>
-
-        <!-- PEONY 1 - Left -->
-        <g class="flower" id="fl2" transform="translate(165,310)" opacity="0">
-          <g filter="url(#softGlow)">
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(0)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(45)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(90)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(135)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(180)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(225)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(270)"/>
-            <ellipse rx="20" ry="13" cx="0" cy="-7" fill="#d4a0b8" opacity="0.65" transform="rotate(315)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(22)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(67)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(112)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(157)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(202)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(247)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(292)"/>
-            <ellipse rx="14" ry="9" cx="0" cy="-5" fill="#e8c0d0" opacity="0.85" transform="rotate(337)"/>
-            <circle r="7" fill="url(#peonyGrad)"/>
-            <circle r="3" fill="#fde8f8" opacity="0.8"/>
-          </g>
-        </g>
-
-        <!-- PEONY 2 - Right -->
-        <g class="flower" id="fl3" transform="translate(262,310)" opacity="0">
-          <g filter="url(#softGlow)">
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(15)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(55)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(95)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(135)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(175)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(215)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(255)"/>
-            <ellipse rx="19" ry="12" cx="0" cy="-7" fill="#c890a8" opacity="0.68" transform="rotate(295)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(35)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(75)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(115)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(155)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(195)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(235)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(275)"/>
-            <ellipse rx="13" ry="8" cx="0" cy="-5" fill="#ddb0c8" opacity="0.88" transform="rotate(315)"/>
-            <circle r="6" fill="url(#peonyGrad)"/>
-            <circle r="2.5" fill="#fde0f0" opacity="0.8"/>
-          </g>
-        </g>
-
-        <!-- ROSE 2 - Far Left -->
-        <g class="flower" id="fl4" transform="translate(130,330)" opacity="0">
-          <g filter="url(#softGlow)">
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#a83050" opacity="0.72" transform="rotate(0)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#a83050" opacity="0.72" transform="rotate(60)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#a83050" opacity="0.72" transform="rotate(120)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#a83050" opacity="0.72" transform="rotate(180)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#a83050" opacity="0.72" transform="rotate(240)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#a83050" opacity="0.72" transform="rotate(300)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#cc5870" opacity="0.88" transform="rotate(30)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#cc5870" opacity="0.88" transform="rotate(90)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#cc5870" opacity="0.88" transform="rotate(150)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#cc5870" opacity="0.88" transform="rotate(210)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#cc5870" opacity="0.88" transform="rotate(270)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#cc5870" opacity="0.88" transform="rotate(330)"/>
-            <circle r="6" fill="url(#roseGrad2)"/>
-          </g>
-        </g>
-
-        <!-- ROSE 3 - Far Right -->
-        <g class="flower" id="fl5" transform="translate(295,335)" opacity="0">
-          <g filter="url(#softGlow)">
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#b84068" opacity="0.72" transform="rotate(15)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#b84068" opacity="0.72" transform="rotate(75)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#b84068" opacity="0.72" transform="rotate(135)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#b84068" opacity="0.72" transform="rotate(195)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#b84068" opacity="0.72" transform="rotate(255)"/>
-            <ellipse rx="16" ry="10" cx="0" cy="-6" fill="#b84068" opacity="0.72" transform="rotate(315)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#d8688a" opacity="0.88" transform="rotate(45)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#d8688a" opacity="0.88" transform="rotate(105)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#d8688a" opacity="0.88" transform="rotate(165)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#d8688a" opacity="0.88" transform="rotate(225)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#d8688a" opacity="0.88" transform="rotate(285)"/>
-            <ellipse rx="11" ry="7" cx="0" cy="-5" fill="#d8688a" opacity="0.88" transform="rotate(345)"/>
-            <circle r="6" fill="url(#roseGrad2)"/>
-          </g>
-        </g>
-
-        <!-- TULIP LEFT -->
-        <g class="flower" id="fl6" transform="translate(142,350)" opacity="0">
-          <g filter="url(#softGlow)">
-            <path d="M 0,-22 C -10,-14 -14,-4 -12,4 C -8,10 -3,14 0,16 C 3,14 8,10 12,4 C 14,-4 10,-14 0,-22 Z" fill="url(#tulipGrad)" opacity="0.85"/>
-            <path d="M -8,-18 C -16,-10 -18,0 -16,8 C -10,12 -5,14 0,14" fill="#e898b0" opacity="0.6"/>
-            <path d="M 8,-18 C 16,-10 18,0 16,8 C 10,12 5,14 0,14" fill="#e898b0" opacity="0.6"/>
-            <path d="M 0,-20 C -2,-10 -2,0 0,8" stroke="#f8c0d0" stroke-width="1" fill="none" opacity="0.5"/>
-          </g>
-        </g>
-
-        <!-- TULIP RIGHT -->
-        <g class="flower" id="fl7" transform="translate(282,348)" opacity="0">
-          <g filter="url(#softGlow)">
-            <path d="M 0,-22 C -10,-14 -14,-4 -12,4 C -8,10 -3,14 0,16 C 3,14 8,10 12,4 C 14,-4 10,-14 0,-22 Z" fill="#d87898" opacity="0.85"/>
-            <path d="M -8,-18 C -16,-10 -18,0 -16,8 C -10,12 -5,14 0,14" fill="#eca0b8" opacity="0.6"/>
-            <path d="M 8,-18 C 16,-10 18,0 16,8 C 10,12 5,14 0,14" fill="#eca0b8" opacity="0.6"/>
-          </g>
-        </g>
-
-        <!-- DAISY LEFT -->
-        <g class="flower" id="fl8" transform="translate(118,368)" opacity="0">
-          <g filter="url(#softGlow)">
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(0)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(36)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(72)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(108)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(144)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(180)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(216)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(252)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(288)"/>
-            <ellipse rx="11" ry="5" cx="0" cy="-8" fill="url(#daisyGrad)" opacity="0.9" transform="rotate(324)"/>
-            <circle r="5.5" fill="#f0c040"/>
-            <circle r="3" fill="#d0a020"/>
-          </g>
-        </g>
-
-        <!-- DAISY RIGHT -->
-        <g class="flower" id="fl9" transform="translate(304,372)" opacity="0">
-          <g filter="url(#softGlow)">
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(18)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(54)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(90)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(126)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(162)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(198)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(234)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(270)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(306)"/>
-            <ellipse rx="10" ry="4.5" cx="0" cy="-7" fill="#f8f0d8" opacity="0.9" transform="rotate(342)"/>
-            <circle r="5" fill="#e8b830"/>
-            <circle r="2.5" fill="#c89010"/>
-          </g>
-        </g>
-
-        <!-- FILLER roses small -->
-        <g class="flower" id="fl10" transform="translate(175,400)" opacity="0">
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#c06080" opacity="0.7" transform="rotate(0)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#c06080" opacity="0.7" transform="rotate(60)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#c06080" opacity="0.7" transform="rotate(120)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#c06080" opacity="0.7" transform="rotate(180)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#c06080" opacity="0.7" transform="rotate(240)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#c06080" opacity="0.7" transform="rotate(300)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#e090a8" opacity="0.85" transform="rotate(30)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#e090a8" opacity="0.85" transform="rotate(90)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#e090a8" opacity="0.85" transform="rotate(150)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#e090a8" opacity="0.85" transform="rotate(210)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#e090a8" opacity="0.85" transform="rotate(270)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#e090a8" opacity="0.85" transform="rotate(330)"/>
-          <circle r="4" fill="#f0b0c8"/>
-        </g>
-
-        <g class="flower" id="fl11" transform="translate(252,398)" opacity="0">
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#b85878" opacity="0.7" transform="rotate(20)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#b85878" opacity="0.7" transform="rotate(80)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#b85878" opacity="0.7" transform="rotate(140)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#b85878" opacity="0.7" transform="rotate(200)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#b85878" opacity="0.7" transform="rotate(260)"/>
-          <ellipse rx="10" ry="6" cx="0" cy="-5" fill="#b85878" opacity="0.7" transform="rotate(320)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#dc8898" opacity="0.88" transform="rotate(50)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#dc8898" opacity="0.88" transform="rotate(110)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#dc8898" opacity="0.88" transform="rotate(170)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#dc8898" opacity="0.88" transform="rotate(230)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#dc8898" opacity="0.88" transform="rotate(290)"/>
-          <ellipse rx="7" ry="4" cx="0" cy="-3" fill="#dc8898" opacity="0.88" transform="rotate(350)"/>
-          <circle r="4" fill="#f0a8c0"/>
-        </g>
-
-        <!-- RIBBON -->
-        <g id="g-ribbon" opacity="0">
-          <path id="ribbon-path" d="M 150,460 C 175,448 200,440 210,438 C 220,440 245,448 270,460 C 255,468 230,470 210,470 C 190,470 165,468 150,460 Z" fill="url(#ribbonGrad)" opacity="0.92"/>
-          <!-- Ribbon bow left loop -->
-          <path d="M 185,450 C 170,435 155,428 148,438 C 150,448 162,452 178,452 Z" fill="#e0c060" opacity="0.85"/>
-          <!-- Ribbon bow right loop -->
-          <path d="M 235,450 C 250,435 265,428 272,438 C 270,448 258,452 242,452 Z" fill="#c8a040" opacity="0.85"/>
-          <!-- Bow knot center -->
-          <ellipse cx="210" cy="449" rx="8" ry="6" fill="#d4b050" opacity="0.95"/>
-          <!-- Ribbon tails -->
-          <path d="M 204,455 C 200,465 196,475 194,490" stroke="#c9a84c" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
-          <path d="M 216,455 C 220,465 224,475 226,490" stroke="#c9a84c" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
-          <!-- Ribbon highlights -->
-          <path d="M 152,461 C 175,449 200,442 210,440" stroke="rgba(255,240,180,0.6)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <path d="M 268,461 C 245,449 220,442 210,440" stroke="rgba(255,240,180,0.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        </g>
-
-      </g><!-- end g-flowers -->
-    </svg>
-  </div>
-
-  <!-- TEXT STAGE -->
-  <div id="text-stage">
-    <!-- Pen SVG -->
-    <div id="pen-svg-wrap">
-      <svg id="pen-svg" width="40" height="40" viewBox="0 0 40 40">
-        <defs>
-          <radialGradient id="penGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#fff8d0"/>
-            <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
-          </radialGradient>
-        </defs>
-        <circle cx="20" cy="20" r="18" fill="url(#penGlow)" opacity="0.6"/>
-        <!-- Pen nib shape -->
-        <path d="M20,6 L28,14 L20,34 L12,14 Z" fill="#d4aa50" opacity="0.9"/>
-        <path d="M20,6 L28,14 L24,14 L20,8 Z" fill="#f0d080" opacity="0.8"/>
-        <path d="M16,26 L20,34 L24,26 L20,28 Z" fill="#3a2010" opacity="0.8"/>
-        <line x1="20" y1="14" x2="20" y2="30" stroke="rgba(255,240,180,0.4)" stroke-width="1"/>
-      </svg>
-    </div>
-
-    <!-- Happy Birthday SVG text -->
-    <svg id="hb-svg" viewBox="0 0 500 80" width="500" height="80" style="max-width:90vw">
-      <defs>
-        <filter id="textGlow">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#f0d080"/>
-          <stop offset="50%" stop-color="#c9a84c"/>
-          <stop offset="100%" stop-color="#e8c870"/>
-        </linearGradient>
-      </defs>
-      <text x="250" y="65" text-anchor="middle"
-        font-family="'Great Vibes', cursive"
-        font-size="68"
-        fill="url(#textGrad)"
-        filter="url(#textGlow)"
-        letter-spacing="2">Happy Birthday</text>
-    </svg>
-
-    <!-- Akshata SVG text -->
-    <svg id="name-svg" viewBox="0 0 400 90" width="400" height="90" style="max-width:85vw">
-      <text x="200" y="72" text-anchor="middle"
-        font-family="'Great Vibes', cursive"
-        font-size="82"
-        fill="url(#textGrad)"
-        filter="url(#textGlow)"
-        letter-spacing="3">Akshata</text>
-    </svg>
-  </div>
-
-  <!-- ENVELOPE SECTION -->
-  <div id="envelope-section">
-    <div id="envelope-wrap">
-      <!-- Envelope SVG -->
-      <svg id="env-svg" viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="envGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#2a1a10"/>
-            <stop offset="100%" stop-color="#180e08"/>
-          </linearGradient>
-          <linearGradient id="envFlapGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#3a2418"/>
-            <stop offset="100%" stop-color="#241410"/>
-          </linearGradient>
-          <linearGradient id="sealGrad" cx="40%" cy="40%" r="55%" id="sealRadGrad" gradientUnits="objectBoundingBox">
-            <stop offset="0%" stop-color="#c84040"/>
-            <stop offset="60%" stop-color="#8a1820"/>
-            <stop offset="100%" stop-color="#600c14"/>
-          </linearGradient>
-          <radialGradient id="sealRadGrad" cx="40%" cy="38%" r="55%">
-            <stop offset="0%" stop-color="#e05050"/>
-            <stop offset="60%" stop-color="#8a1820"/>
-            <stop offset="100%" stop-color="#500c10"/>
-          </radialGradient>
-          <filter id="envShadow" x="-10%" y="-10%" width="120%" height="130%">
-            <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="rgba(0,0,0,0.7)"/>
-          </filter>
-          <filter id="sealGlow">
-            <feGaussianBlur stdDeviation="3" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- Envelope body -->
-        <g filter="url(#envShadow)">
-          <rect x="10" y="80" width="360" height="170" rx="4" fill="url(#envGrad)"
-            stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
-          <!-- inner shadow lines -->
-          <line x1="10" y1="80" x2="190" y2="170" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
-          <line x1="370" y1="80" x2="190" y2="170" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
-          <line x1="10" y1="250" x2="190" y2="170" stroke="rgba(201,168,76,0.05)" stroke-width="0.5"/>
-          <line x1="370" y1="250" x2="190" y2="170" stroke="rgba(201,168,76,0.05)" stroke-width="0.5"/>
-
-          <!-- Envelope flap (top, closed) -->
-          <path id="env-flap" d="M 10,80 L 190,175 L 370,80 Z"
-            fill="url(#envFlapGrad)"
-            stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
-
-          <!-- Border decoration -->
-          <rect x="18" y="88" width="344" height="154" rx="2" fill="none"
-            stroke="rgba(201,168,76,0.15)" stroke-width="0.5" stroke-dasharray="4,4"/>
-        </g>
-
-        <!-- WAX SEAL -->
-        <g id="wax-seal" transform="translate(190,165)" filter="url(#sealGlow)">
-          <circle r="28" fill="url(#sealRadGrad)"/>
-          <circle r="24" fill="none" stroke="rgba(255,180,180,0.2)" stroke-width="1.5"/>
-          <!-- Seal decorative pattern -->
-          <path d="M0,-18 L3,-6 L14,-6 L6,2 L9,14 L0,8 L-9,14 L-6,2 L-14,-6 L-3,-6 Z"
-            fill="rgba(255,200,200,0.25)" stroke="rgba(255,200,200,0.3)" stroke-width="0.5"/>
-          <text x="0" y="5" text-anchor="middle" font-family="'Cormorant Garamond', serif"
-            font-size="10" fill="rgba(255,220,200,0.7)" letter-spacing="1">A</text>
-          <circle r="4" fill="rgba(255,180,180,0.15)"/>
-        </g>
-      </svg>
-
-      <div id="click-hint">touch to open</div>
-    </div>
-
-    <!-- Letter -->
-    <div id="letter-wrap">
-      <div id="letter-inner"></div><span id="letter-cursor"></span>
-    </div>
-  </div>
-
-</div><!-- end stage -->
-
-<script>
-gsap.registerPlugin(MotionPathPlugin);
-
-// ─── CURSOR ──────────────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const cursorGlow = document.getElementById('cursor-glow');
-let mx = window.innerWidth/2, my = window.innerHeight/2;
-let gx = mx, gy = my;
-
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  gsap.to(cursor, { x: mx, y: my, duration: 0.08, ease: 'none' });
-  gsap.to(cursorGlow, { x: mx, y: my, duration: 0.25, ease: 'power2.out' });
-});
-
-// ─── STARS ───────────────────────────────────────────────
-const starCanvas = document.getElementById('star-canvas');
-const sCtx = starCanvas.getContext('2d');
-function resizeStarCanvas() {
-  starCanvas.width = window.innerWidth;
-  starCanvas.height = window.innerHeight;
-}
-resizeStarCanvas();
-window.addEventListener('resize', resizeStarCanvas);
-
-const stars = [];
-for (let i = 0; i < 220; i++) {
-  stars.push({
-    x: Math.random(), y: Math.random() * 0.7,
-    r: Math.random() * 1.4 + 0.2,
-    a: Math.random(),
-    speed: Math.random() * 0.008 + 0.003,
-    phase: Math.random() * Math.PI * 2
-  });
-}
-
-function drawStars(time) {
-  const W = starCanvas.width, H = starCanvas.height;
-  sCtx.clearRect(0, 0, W, H);
-  stars.forEach(s => {
-    const tw = 0.5 + 0.5 * Math.sin(time * s.speed + s.phase);
-    const alpha = s.a * (0.4 + 0.6 * tw);
-    sCtx.beginPath();
-    sCtx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-    sCtx.fillStyle = `rgba(255,245,230,${alpha})`;
-    sCtx.fill();
-  });
-  requestAnimationFrame(drawStars);
-}
-requestAnimationFrame(drawStars);
-
-// ─── PARTICLE SYSTEM ─────────────────────────────────────
-const pCanvas = document.getElementById('particle-canvas');
-const pCtx = pCanvas.getContext('2d');
-function resizePCanvas() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
-resizePCanvas();
-window.addEventListener('resize', resizePCanvas);
-
-const particles = [];
-function spawnParticle(x, y, type) {
-  const hue = type === 'dust' ? 45 : type === 'spark' ? 50 : 320;
-  const sat = type === 'petal' ? '60%' : '70%';
-  particles.push({
-    x, y,
-    vx: (Math.random()-0.5) * (type==='spark'?3:1.5),
-    vy: -Math.random() * (type==='spark'?2.5:1.5) - 0.5,
-    life: 1,
-    decay: Math.random() * 0.015 + (type==='spark'?0.02:0.008),
-    r: Math.random() * (type==='spark'?3:4) + 1,
-    color: `hsl(${hue},${sat},80%)`
-  });
-}
-
-function updateParticles() {
-  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
-    p.x += p.vx; p.y += p.vy; p.vy += 0.02; p.life -= p.decay;
-    if (p.life <= 0) { particles.splice(i, 1); continue; }
-    const grd = pCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 2);
-    grd.addColorStop(0, p.color.replace(')', `,${p.life})`).replace('hsl', 'hsla'));
-    grd.addColorStop(1, p.color.replace(')', ',0)').replace('hsl', 'hsla'));
-    pCtx.beginPath();
-    pCtx.arc(p.x, p.y, p.r * 2, 0, Math.PI * 2);
-    pCtx.fillStyle = grd;
-    pCtx.fill();
-  }
-  requestAnimationFrame(updateParticles);
-}
-requestAnimationFrame(updateParticles);
-
-// ─── FIREFLIES ────────────────────────────────────────────
-function createFirefly() {
-  const ff = document.createElement('div');
-  ff.className = 'firefly';
-  const sz = Math.random() * 4 + 2;
-  const hue = Math.random() > 0.5 ? 50 : 200;
-  ff.style.cssText = `width:${sz}px;height:${sz}px;
-    background:radial-gradient(circle,hsl(${hue},80%,90%),transparent);
-    box-shadow:0 0 ${sz*3}px hsl(${hue},80%,70%);
-    left:${Math.random()*100}%;top:${20+Math.random()*60}%;`;
-  document.getElementById('stage').appendChild(ff);
-
-  const tl = gsap.timeline({ repeat: -1 });
-  tl.to(ff, {
-    x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*150,
-    opacity: 0.8, duration: 3+Math.random()*4, ease: 'sine.inOut'
-  }).to(ff, {
-    x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*150,
-    opacity: 0.2, duration: 3+Math.random()*4, ease: 'sine.inOut'
-  });
-}
-for(let i=0;i<14;i++) setTimeout(createFirefly, i*300);
-
-// ─── SPARKLE DOM ─────────────────────────────────────────
-function createSparkle(x, y) {
-  const s = document.createElement('div');
-  s.className = 'sparkle';
-  s.style.left = x + 'px'; s.style.top = y + 'px';
-  const sz = 8 + Math.random()*12;
-  s.innerHTML = `<svg width="${sz}" height="${sz}" viewBox="0 0 20 20">
-    <path d="M10,0 L11.5,8.5 L20,10 L11.5,11.5 L10,20 L8.5,11.5 L0,10 L8.5,8.5 Z"
-      fill="hsl(${40+Math.random()*20},80%,75%)" opacity="${0.7+Math.random()*0.3}"/>
-  </svg>`;
-  document.getElementById('stage').appendChild(s);
-  setTimeout(() => s.remove(), 900);
-}
-
-// ─── FAIRY PATH ───────────────────────────────────────────
-const fairyContainer = document.getElementById('fairy-container');
-let fairyPathIndex = 0;
-const fairyPaths = [
-  { x:[0.15,0.3,0.5,0.7,0.85], y:[0.6,0.3,0.5,0.25,0.55] },
-  { x:[0.85,0.7,0.5,0.3,0.15], y:[0.55,0.4,0.6,0.35,0.65] },
-  { x:[0.15,0.4,0.6,0.8,0.5],  y:[0.65,0.2,0.45,0.7,0.35] },
-];
-
-function animateFairy() {
-  const path = fairyPaths[fairyPathIndex % fairyPaths.length];
-  fairyPathIndex++;
-  const W = window.innerWidth, H = window.innerHeight;
-
-  const keyframes = path.x.map((px, i) => ({
-    x: px * W, y: path.y[i] * H, ease: 'power2.inOut'
-  }));
-
-  let t = 0;
-  keyframes.forEach((kf, i) => {
-    if (i === 0) return;
-    const prev = i > 0 ? keyframes[i-1] : { x: parseFloat(fairyContainer.style.left)||W/2, y: parseFloat(fairyContainer.style.top)||H/2 };
-    t += 2.2;
-    gsap.to(fairyContainer, {
-      left: kf.x, top: kf.y, duration: 2.2, ease: 'power2.inOut', delay: t - 2.2,
-      onUpdate: function() {
-        const fx = parseFloat(fairyContainer.style.left);
-        const fy = parseFloat(fairyContainer.style.top);
-        if (Math.random() < 0.25) {
-          spawnParticle(fx, fy, 'dust');
-          if (Math.random() < 0.3) createSparkle(fx, fy);
-        }
-      }
-    });
-  });
-  setTimeout(animateFairy, t * 1000 + 400);
-}
-
-// ─── PETALS FALLING ───────────────────────────────────────
-function spawnFallingPetal() {
-  const el = document.createElement('div');
-  el.className = 'petal';
-  const colors = ['#e8a0b8','#f0c0d0','#d88898','#f8d0e0','#c87890'];
-  const color = colors[Math.floor(Math.random()*colors.length)];
-  const sz = 8 + Math.random()*10;
-  el.innerHTML = `<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 10 14">
-    <ellipse cx="5" cy="7" rx="4.5" ry="6.5" fill="${color}" opacity="0.75" transform="rotate(${Math.random()*30-15},5,7)"/>
-  </svg>`;
-  el.style.left = Math.random()*100 + 'vw';
-  el.style.top = '-30px';
-  document.getElementById('stage').appendChild(el);
-  gsap.to(el, {
-    y: window.innerHeight + 60,
-    x: (Math.random()-0.5)*200,
-    rotation: (Math.random()-0.5)*540,
-    opacity: 0,
-    duration: 6 + Math.random()*6,
-    ease: 'none',
-    onComplete: () => el.remove()
-  });
-  gsap.fromTo(el, { opacity: 0 }, { opacity: 0.7, duration: 1 });
-}
-
-// ─── PARALLAX ─────────────────────────────────────────────
-document.addEventListener('mousemove', e => {
-  const px = (e.clientX / window.innerWidth - 0.5) * 20;
-  const py = (e.clientY / window.innerHeight - 0.5) * 12;
-  gsap.to('#moon', { x: -px * 0.5, y: -py * 0.5, duration: 1.5, ease: 'power2.out' });
-  gsap.to('#bouquet-wrap', { x: -px * 0.3, y: -py * 0.2, duration: 1.8, ease: 'power2.out' });
-  gsap.to('.amb-blob', { x: -px * 0.8, y: -py * 0.5, duration: 2, ease: 'power2.out', stagger: 0.1 });
-});
-
-// ─── BREATHING ANIMATIONS ─────────────────────────────────
-function breathe(el, scale1, scale2, dur) {
-  gsap.to(el, { scale: scale2, duration: dur, ease: 'sine.inOut', yoyo: true, repeat: -1, transformOrigin: 'center center', overwrite: false });
-}
-
-// ─── MAIN TIMELINE ────────────────────────────────────────
-const master = gsap.timeline({ delay: 0.3 });
-
-// 1. Fade in from black
-master.to('#fade-overlay', { opacity: 0, duration: 2.5, ease: 'power2.inOut' });
-
-// 2. Stars fade in
-master.to('#star-canvas', { opacity: 1, duration: 3, ease: 'power2.inOut' }, '-=1.5');
-
-// 3. Ambient blobs
-master.to('.amb-blob', { opacity: 1, duration: 4, stagger: 0.6, ease: 'power2.inOut' }, '-=2');
-
-// 4. Moon fades in with bloom
-master.to('#moon', { opacity: 1, duration: 3, ease: 'power2.inOut' }, '-=2');
-master.call(() => { breathe('#moon svg', 1, 1.04, 4); });
-
-// 5. Firefly enter
-master.to({}, { duration: 1 });
-
-// 6. Fairy appears
-master.to('#fairy-container', { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
-master.call(() => {
-  const W = window.innerWidth, H = window.innerHeight;
-  gsap.set('#fairy-container', { left: W * 0.15, top: H * 0.6 });
-  animateFairy();
-});
-
-// 7. Ground glow rises
-master.to('#ground-glow', { opacity: 1, duration: 3, ease: 'power2.inOut' }, '-=0.5');
-
-// 8. Bouquet appears - stems grow
-master.to('#bouquet-wrap', { opacity: 1, duration: 0.5 }, '+=1.5');
-master.to('#g-stems', { opacity: 1, duration: 0.3 });
-// Stems draw up (simulate with scaleY from bottom)
-master.fromTo('#g-stems', { scaleY: 0 }, { scaleY: 1, duration: 2.5, ease: 'power2.out', transformOrigin: 'center bottom' });
-
-// 9. Leaves unfold
-master.fromTo('#g-leaves', { opacity: 0, scale: 0 },
-  { opacity: 1, scale: 1, duration: 1.8, ease: 'back.out(1.4)', transformOrigin: 'center bottom' }, '-=1');
-
-// 10. Flowers bloom one by one
-const flowers = ['#fl1','#fl2','#fl3','#fl4','#fl5','#fl6','#fl7','#fl8','#fl9','#fl10','#fl11'];
-flowers.forEach((id, i) => {
-  master.fromTo(id, { scale: 0, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.6)', transformOrigin: '0px 0px' },
-    i === 0 ? '-=0.8' : '-=0.7');
-  master.call(() => {
-    const el = document.querySelector(id);
-    if (el) breathe(id, 0.97, 1.03, 2 + Math.random());
-  });
-});
-
-// 11. Ribbon ties
-master.to('#g-ribbon', { opacity: 1, duration: 0.3 }, '+=0.5');
-master.fromTo('#g-ribbon', { scaleX: 0 }, {
-  scaleX: 1, duration: 1.8, ease: 'elastic.out(0.8,0.5)', transformOrigin: '210px 454px'
-});
-
-// 12. Start petals falling
-master.call(() => {
-  setInterval(() => { if (Math.random() < 0.5) spawnFallingPetal(); }, 800);
-});
-
-// 13. Bouquet floats up slightly, text stage comes in
-master.to('#bouquet-wrap', { y: -30, duration: 2, ease: 'power2.inOut' }, '+=0.8');
-master.to('#text-stage', { pointerEvents: 'none' });
-
-// 14. Pen appears
-master.to('#pen-svg-wrap', { opacity: 1, duration: 0.8 });
-master.set('#pen-svg-wrap', { top: '26%', left: '50%', xPercent: -50 });
-
-// 15. "Happy Birthday" writes itself
-master.to('#hb-svg', { opacity: 1, duration: 0.5 }, '-=0.3');
-master.fromTo('#hb-svg text',
-  { strokeDashoffset: 2000, strokeDasharray: 2000, opacity: 0, fill: 'rgba(240,208,128,0)', stroke: 'rgba(201,168,76,0.9)', strokeWidth: 0.5 },
-  { strokeDashoffset: 0, opacity: 1, fill: 'url(#textGrad)', duration: 4, ease: 'power2.inOut' }
-);
-
-// Sparkles during write
-master.call(() => {
-  let count = 0;
-  const interval = setInterval(() => {
-    const hbRect = document.getElementById('hb-svg').getBoundingClientRect();
-    createSparkle(
-      hbRect.left + Math.random() * hbRect.width,
-      hbRect.top + Math.random() * hbRect.height
-    );
-    if (++count > 30) clearInterval(interval);
-  }, 120);
-}, [], '-=3.5');
-
-// Move pen to name position
-master.to('#pen-svg-wrap', { top: '38%', duration: 0.8, ease: 'power2.inOut' }, '-=0.5');
-
-// 16. "Akshata" writes
-master.to('#name-svg', { opacity: 1, duration: 0.3 });
-master.fromTo('#name-svg text',
-  { strokeDashoffset: 2000, strokeDasharray: 2000, opacity: 0, fill: 'rgba(240,208,128,0)', stroke: 'rgba(201,168,76,0.9)', strokeWidth: 0.5 },
-  { strokeDashoffset: 0, opacity: 1, fill: 'url(#textGrad)', duration: 3.2, ease: 'power2.inOut' }
-);
-master.call(() => {
-  let count = 0;
-  const interval = setInterval(() => {
-    const nRect = document.getElementById('name-svg').getBoundingClientRect();
-    createSparkle(nRect.left + Math.random()*nRect.width, nRect.top + Math.random()*nRect.height);
-    if(++count > 25) clearInterval(interval);
-  }, 130);
-  breathe('#hb-svg', 0.98, 1.02, 3);
-  breathe('#name-svg', 0.99, 1.01, 2.5);
-}, [], '-=2.5');
-
-// Pen fades away
-master.to('#pen-svg-wrap', { opacity: 0, duration: 0.8 }, '-=0.5');
-
-// 17. Wait, then bring in envelope
-master.to({}, { duration: 2.5 });
-
-// Bouquet slides down (off screen partially)
-master.to('#bouquet-wrap', { y: 200, opacity: 0.4, duration: 2, ease: 'power2.inOut' });
-master.to('#text-stage', { opacity: 0, y: -40, duration: 1.5, ease: 'power2.inOut' }, '-=1.5');
-
-// Envelope floats in
-master.to('#envelope-section', { opacity: 1, pointerEvents: 'auto', duration: 1.5, ease: 'power2.out' }, '-=0.5');
-master.fromTo('#envelope-wrap', { y: 80, scale: 0.8 }, { y: 0, scale: 1, duration: 1.8, ease: 'back.out(1.2)' }, '-=1');
-master.to('#envelope-wrap', { y: -8, duration: 2.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-
-// ─── ENVELOPE CLICK ───────────────────────────────────────
-const NOTE = `My dearest Akshata,
-
-On this beautiful day, the stars paused
-their dance just to celebrate you.
-
-You bring magic to every room you enter —
-the kind of quiet, luminous magic
-that makes the world softer and brighter
-just by existing in it.
-
-May this year hold every dream
-you've dared to whisper,
-every adventure you've longed for,
-and every joy you deserve
-— which is boundless.
-
-With all the warmth in the universe,
-Happy Birthday. 🌸`;
-
-let envelopeOpened = false;
-document.getElementById('envelope-wrap').addEventListener('click', openEnvelope);
-
-function openEnvelope() {
-  if (envelopeOpened) return;
-  envelopeOpened = true;
-  document.getElementById('click-hint').style.display = 'none';
-  document.getElementById('envelope-wrap').style.cursor = 'default';
-
-  // Wax seal breaks
-  const sealTl = gsap.timeline();
-  sealTl.to('#wax-seal', { scale: 1.15, duration: 0.1, ease: 'power4.out' })
-         .to('#wax-seal', { scale: 0, opacity: 0, rotation: 20, duration: 0.4, ease: 'back.in(2)' });
-
-  // Spawn sparks
-  const sealEl = document.getElementById('wax-seal');
-  const sealRect = document.getElementById('env-svg').getBoundingClientRect();
-  for (let i = 0; i < 20; i++) {
-    setTimeout(() => spawnParticle(sealRect.left + 190, sealRect.top + 165, 'spark'), i * 30);
+  @keyframes twinkle{
+    0%, 100%{ opacity: 0.15; }
+    50%{ opacity: 0.75; }
   }
 
-  // Flap opens
-  gsap.to('#env-flap', {
-    scaleY: -1, transformOrigin: '190px 80px',
-    duration: 1.2, ease: 'power2.inOut', delay: 0.3
-  });
-
-  // Letter rises and unfolds
-  const letterWrap = document.getElementById('letter-wrap');
-  letterWrap.style.pointerEvents = 'auto';
-  gsap.to(letterWrap, { opacity: 1, duration: 0.4, delay: 0.8 });
-  gsap.to(letterWrap, { scaleY: 1, y: -280, duration: 1.4, ease: 'power2.out', delay: 0.8 });
-
-  // Typewriter effect
-  const letterEl = document.getElementById('letter-inner');
-  let idx = 0;
-  function type() {
-    if (idx < NOTE.length) {
-      letterEl.textContent = NOTE.slice(0, ++idx);
-      setTimeout(type, idx === 1 ? 900 : 18 + Math.random()*20);
-    } else {
-      document.getElementById('letter-cursor').style.animation = 'none';
-      document.getElementById('letter-cursor').style.opacity = '0';
-    }
+  #glow{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 900px;
+    height: 900px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(201,162,75,0.10) 0%, rgba(201,162,75,0.03) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
   }
-  setTimeout(type, 1800);
 
-  // Sparkles rain on letter after
-  setTimeout(() => {
-    let sc = 0;
-    const iv = setInterval(() => {
-      const r = letterWrap.getBoundingClientRect();
-      createSparkle(r.left + Math.random()*r.width, r.top + Math.random()*r.height);
-      if(++sc > 25) clearInterval(iv);
-    }, 200);
-  }, 2000);
-}
-</script>
-</body>
-</html>
-HTMLEOF
-echo "Done: $(wc -c < /mnt/user-data/outputs/index.html) bytes"
+  /* ---------- Stage (seal view) ---------- */
+  .stage{
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+    transition: opacity 0.7s ease, filter 0.7s ease, transform 0.7s ease;
+  }
+
+  .stage.hidden{
+    opacity: 0;
+    filter: blur(6px);
+    transform: scale(0.96);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .eyebrow{
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 500;
+  }
+
+  .eyebrow span{
+    color: var(--gold-soft);
+  }
+
+  /* Seal row: sprig — seal — sprig */
+  .seal-row{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(6px, 3vw, 26px);
+  }
+
+  .sprig{
+    width: clamp(34px, 8vw, 56px);
+    height: auto;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+  .sprig.right{ transform: scaleX(-1); }
+
+  .sprig path, .sprig ellipse, .sprig circle{
+    fill: none;
+    stroke: var(--gold-soft);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+  }
+  .sprig .petal{
+    fill: rgba(230,205,143,0.12);
+  }
+  .sprig .leaf{
+    stroke: var(--gold);
+    opacity: 0.75;
+  }
+
+  /* Wax seal */
+  .seal-wrap{
+    position: relative;
+    width: 168px;
+    height: 168px;
+    margin: 0 auto;
+  }
+
+  .seal-btn{
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    display: block;
+    position: relative;
+    transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .seal-btn:hover{ transform: translateY(-3px); }
+  .seal-btn:active{ transform: translateY(1px) scale(0.97); }
+
+  .seal-btn:focus-visible{
+    outline: 2px solid var(--gold-soft);
+    outline-offset: 6px;
+  }
+
+  .seal-btn svg{
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.55));
+  }
+
+  .seal-crack{
+    stroke: var(--ink-deep);
+    stroke-width: 1.4;
+    fill: none;
+    stroke-linecap: round;
+    opacity: 0;
+  }
+
+  .seal-btn.cracking .seal-crack{
+    animation: crackIn 0.5s ease forwards;
+  }
+  .seal-btn.cracking .seal-crack.c2{ animation-delay: 0.08s; }
+  .seal-btn.cracking .seal-crack.c3{ animation-delay: 0.15s; }
+
+  @keyframes crackIn{
+    from{ opacity: 0; stroke-dasharray: 40; stroke-dashoffset: 40; }
+    to{ opacity: 0.9; stroke-dasharray: 40; stroke-dashoffset: 0; }
+  }
+
+  .seal-btn.breaking{
+    animation: sealBreak 0.65s cubic-bezier(.5,0,.75,0) forwards;
+  }
+
+  @keyframes sealBreak{
+    0%{ transform: scale(1) rotate(0deg); opacity: 1; }
+    40%{ transform: scale(1.08) rotate(-3deg); }
+    100%{ transform: scale(1.35) rotate(6deg); opacity: 0; filter: blur(3px); }
+  }
+
+  .prompt-text{
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
