@@ -216,3 +216,427 @@
     font-size: 12px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    color: var(--text-faint);
+    transition: opacity 0.3s ease;
+  }
+
+  .seal-wrap:hover + .prompt-text,
+  .seal-btn:focus-visible ~ .prompt-text{
+    color: var(--gold-soft);
+  }
+
+  /* ---------- Letter view ---------- */
+  .letter-scene{
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.22,1,.36,1);
+  }
+
+  .letter-scene.visible{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .letter{
+    position: relative;
+    width: 100%;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(201,162,75,0.06), transparent 40%),
+      var(--parchment);
+    color: #2b2416;
+    border-radius: 3px;
+    padding: 56px 48px 48px;
+    box-shadow:
+      0 30px 60px -20px rgba(0,0,0,0.65),
+      0 0 0 1px rgba(201,162,75,0.15);
+  }
+
+  .letter::before{
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(168,90,63,0.28);
+    pointer-events: none;
+  }
+
+  .letter-eyebrow{
+    font-family: var(--sans);
+    font-size: 10.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ember-dark);
+    text-align: center;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+
+  .headline{
+    font-family: var(--serif-display);
+    font-weight: 600;
+    font-size: clamp(28px, 6vw, 44px);
+    line-height: 1.12;
+    text-align: center;
+    letter-spacing: 0.01em;
+    color: #201a10;
+    margin: 0 0 22px;
+  }
+
+  .flourish{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 0 auto 30px;
+    width: 100%;
+  }
+  .flourish::before, .flourish::after{
+    content: "";
+    height: 1px;
+    flex: 1;
+    max-width: 90px;
+    background: linear-gradient(90deg, transparent, var(--ember));
+  }
+  .flourish::after{ background: linear-gradient(90deg, var(--ember), transparent); }
+  .flourish-heart{
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: var(--ember);
+  }
+  .flourish-heart svg{ width: 100%; height: 100%; }
+
+  .corner-flower{
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    opacity: 0.5;
+  }
+  .corner-flower path, .corner-flower ellipse{
+    fill: none;
+    stroke: var(--ember);
+    stroke-width: 1;
+  }
+  .corner-flower.tl{ top: 18px; left: 18px; }
+  .corner-flower.tr{ top: 18px; right: 18px; transform: scaleX(-1); }
+
+  /* Floating hearts/petals ambient layer */
+  .drift{
+    position: absolute;
+    bottom: -10%;
+    color: var(--ember);
+    opacity: 0;
+    animation: driftUp linear infinite;
+  }
+  .drift svg{ width: 100%; height: 100%; display: block; }
+
+  @keyframes driftUp{
+    0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+    10%{ opacity: 0.45; }
+    90%{ opacity: 0.25; }
+    100%{ transform: translateY(-115vh) translateX(20px) rotate(25deg); opacity: 0; }
+  }
+
+  /* ---- NOTE CONTENT: replace the paragraph(s) inside #note-content ---- */
+  #note-content{
+    font-family: var(--serif-note);
+    font-size: clamp(18px, 2.6vw, 21px);
+    line-height: 1.75;
+    color: #3a3120;
+  }
+  #note-content p{
+    margin: 0 0 18px;
+  }
+  #note-content p:last-child{
+    margin-bottom: 0;
+  }
+
+  .signature{
+    margin-top: 34px;
+    text-align: right;
+    font-family: var(--serif-display);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ember-dark);
+  }
+
+  .letter-footer{
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .reseal-btn{
+    appearance: none;
+    background: none;
+    border: 1px solid rgba(168,90,63,0.35);
+    color: var(--ember-dark);
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+  .reseal-btn:hover{
+    background: rgba(168,90,63,0.08);
+    border-color: rgba(168,90,63,0.6);
+  }
+  .reseal-btn:focus-visible{
+    outline: 2px solid var(--ember);
+    outline-offset: 3px;
+  }
+
+  footer.credit{
+    position: fixed;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(139,136,121,0.4);
+    z-index: 1;
+  }
+
+  @media (max-width: 480px){
+    .letter{ padding: 42px 24px 36px; }
+    .seal-wrap{ width: 132px; height: 132px; }
+    .seal-btn{ width: 132px; height: 132px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="stars" aria-hidden="true"></div>
+<div id="glow" aria-hidden="true"></div>
+<div id="drift-layer" aria-hidden="true" style="position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;"></div>
+
+<!-- SEAL / OPENING VIEW -->
+<div class="stage" id="stage">
+  <p class="eyebrow">A little something for <span>Akshata</span></p>
+
+  <div class="seal-row">
+    <svg class="sprig" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+      <path class="leaf" d="M30 95 C 30 70, 20 55, 30 30"/>
+      <path class="leaf" d="M30 78 C 20 74, 12 66, 10 56"/>
+      <path class="leaf" d="M30 60 C 40 56, 47 48, 48 38"/>
+      <g transform="translate(30,22)">
+        <ellipse class="petal" cx="0" cy="-9" rx="6" ry="9"/>
+        <ellipse class="petal" cx="8" cy="-3" rx="6" ry="9" transform="rotate(70 8 -3)"/>
+        <ellipse class="petal" cx="5" cy="7" rx="6" ry="9" transform="rotate(140 5 7)"/>
+        <ellipse class="petal" cx="-5" cy="7" rx="6" ry="9" transform="rotate(210 -5 7)"/>
+        <ellipse class="petal" cx="-8" cy="-3" rx="6" ry="9" transform="rotate(290 -8 -3)"/>
+        <circle cx="0" cy="0" r="3.2" fill="var(--gold)" stroke="none"/>
+      </g>
+      <g transform="translate(12,58) scale(0.6)">
+        <ellipse class="petal" cx="0" cy="-9" rx="6" ry="9"/>
+        <ellipse class="petal" cx="8" cy="-3" rx="6" ry="9" transform="rotate(70 8 -3)"/>
+        <ellipse class="petal" cx="5" cy="7" rx="6" ry="9" transform="rotate(140 5 7)"/>
+        <ellipse class="petal" cx="-5" cy="7" rx="6" ry="9" transform="rotate(210 -5 7)"/>
+        <ellipse class="petal" cx="-8" cy="-3" rx="6" ry="9" transform="rotate(290 -8 -3)"/>
+        <circle cx="0" cy="0" r="3" fill="var(--gold)" stroke="none"/>
+      </g>
+    </svg>
+
+    <div class="seal-wrap">
+    <button class="seal-btn" id="sealBtn" aria-label="Break the seal to open your letter">
+      <svg viewBox="0 0 168 168" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="waxGrad" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#c96a4c"/>
+            <stop offset="55%" stop-color="#a85a3f"/>
+            <stop offset="100%" stop-color="#7c3f2b"/>
+          </radialGradient>
+          <filter id="waxTexture">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise" seed="7"/>
+            <feDiffuseLighting in="noise" lighting-color="#ffffff" surfaceScale="1.5" result="light">
+              <feDistantLight azimuth="235" elevation="60"/>
+            </feDiffuseLighting>
+            <feComposite in="light" in2="SourceGraphic" operator="arithmetic" k1="0" k2="0.9" k3="0.25" k4="0"/>
+          </filter>
+        </defs>
+
+        <circle cx="84" cy="84" r="78" fill="url(#waxGrad)" filter="url(#waxTexture)"/>
+        <circle cx="84" cy="84" r="78" fill="none" stroke="#5c2c1e" stroke-width="1" opacity="0.4"/>
+        <circle cx="84" cy="84" r="63" fill="none" stroke="#e6cd8f" stroke-width="1" opacity="0.35"/>
+
+        <text x="84" y="101" text-anchor="middle"
+              font-family="Fraunces, serif" font-size="58" font-weight="600"
+              fill="#f3e6cf" opacity="0.92">A</text>
+
+        <path class="seal-crack c1" d="M40 55 L70 78 L60 100 L84 118 L92 140" />
+        <path class="seal-crack c2" d="M120 40 L100 68 L112 95 L90 110" />
+        <path class="seal-crack c3" d="M84 20 L88 60 L70 78" />
+      </svg>
+    </button>
+    </div>
+
+    <svg class="sprig right" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+      <path class="leaf" d="M30 95 C 30 70, 20 55, 30 30"/>
+      <path class="leaf" d="M30 78 C 20 74, 12 66, 10 56"/>
+      <path class="leaf" d="M30 60 C 40 56, 47 48, 48 38"/>
+      <g transform="translate(30,22)">
+        <ellipse class="petal" cx="0" cy="-9" rx="6" ry="9"/>
+        <ellipse class="petal" cx="8" cy="-3" rx="6" ry="9" transform="rotate(70 8 -3)"/>
+        <ellipse class="petal" cx="5" cy="7" rx="6" ry="9" transform="rotate(140 5 7)"/>
+        <ellipse class="petal" cx="-5" cy="7" rx="6" ry="9" transform="rotate(210 -5 7)"/>
+        <ellipse class="petal" cx="-8" cy="-3" rx="6" ry="9" transform="rotate(290 -8 -3)"/>
+        <circle cx="0" cy="0" r="3.2" fill="var(--gold)" stroke="none"/>
+      </g>
+      <g transform="translate(12,58) scale(0.6)">
+        <ellipse class="petal" cx="0" cy="-9" rx="6" ry="9"/>
+        <ellipse class="petal" cx="8" cy="-3" rx="6" ry="9" transform="rotate(70 8 -3)"/>
+        <ellipse class="petal" cx="5" cy="7" rx="6" ry="9" transform="rotate(140 5 7)"/>
+        <ellipse class="petal" cx="-5" cy="7" rx="6" ry="9" transform="rotate(210 -5 7)"/>
+        <ellipse class="petal" cx="-8" cy="-3" rx="6" ry="9" transform="rotate(290 -8 -3)"/>
+        <circle cx="0" cy="0" r="3" fill="var(--gold)" stroke="none"/>
+      </g>
+    </svg>
+  </div>
+
+  <p class="prompt-text">press to break the seal</p>
+</div>
+
+<!-- LETTER VIEW -->
+<div class="letter-scene" id="letterScene">
+  <article class="letter">
+    <svg class="corner-flower tl" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 42 C 4 28, 10 18, 18 8"/>
+      <path d="M8 30 C 14 30, 18 26, 19 20"/>
+      <ellipse cx="20" cy="8" rx="4.5" ry="6.5"/>
+      <ellipse cx="26" cy="12" rx="4.5" ry="6.5" transform="rotate(70 26 12)"/>
+      <ellipse cx="24" cy="19" rx="4.5" ry="6.5" transform="rotate(140 24 19)"/>
+      <ellipse cx="16" cy="18" rx="4.5" ry="6.5" transform="rotate(210 16 18)"/>
+      <ellipse cx="14" cy="10" rx="4.5" ry="6.5" transform="rotate(290 14 10)"/>
+    </svg>
+    <svg class="corner-flower tr" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 42 C 4 28, 10 18, 18 8"/>
+      <path d="M8 30 C 14 30, 18 26, 19 20"/>
+      <ellipse cx="20" cy="8" rx="4.5" ry="6.5"/>
+      <ellipse cx="26" cy="12" rx="4.5" ry="6.5" transform="rotate(70 26 12)"/>
+      <ellipse cx="24" cy="19" rx="4.5" ry="6.5" transform="rotate(140 24 19)"/>
+      <ellipse cx="16" cy="18" rx="4.5" ry="6.5" transform="rotate(210 16 18)"/>
+      <ellipse cx="14" cy="10" rx="4.5" ry="6.5" transform="rotate(290 14 10)"/>
+    </svg>
+
+    <p class="letter-eyebrow">Delivered on your birthday</p>
+    <h1 class="headline">HAPPY BIRTHDAY<br>AKSHATA</h1>
+
+    <div class="flourish">
+      <span class="flourish-heart">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10.2-9.2C.3 8.9 1.4 5.6 4.4 4.6c2-.7 4 .1 5.1 1.8l1 1.5.5-1.5c.9-1.7 3.1-2.5 5.1-1.8 3 1 4.1 4.3 2.6 7.2C19.5 16.4 12 21 12 21z"/></svg>
+      </span>
+    </div>
+
+    <!-- ============================================= -->
+    <!--  NOTE CONTENT — replace the text below with    -->
+    <!--  the real note whenever you're ready.          -->
+    <!-- ============================================= -->
+    <div id="note-content">
+      <p>Your note goes here. Replace this paragraph (inside the <code>#note-content</code> div in the HTML) with what you actually want to say to her.</p>
+    </div>
+
+    <p class="signature">— you</p>
+
+    <div class="letter-footer">
+      <button class="reseal-btn" id="resealBtn">Seal it again</button>
+    </div>
+  </article>
+</div>
+
+<footer class="credit">made with care</footer>
+
+<script>
+  // ---- Starfield ----
+  (function generateStars(){
+    const container = document.getElementById('stars');
+    const count = window.innerWidth < 600 ? 60 : 110;
+    const frag = document.createDocumentFragment();
+    for(let i = 0; i < count; i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 1.8 + 0.6;
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.top = Math.random() * 100 + 'vh';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.animationDuration = (Math.random() * 4 + 3) + 's';
+      s.style.animationDelay = (Math.random() * 4) + 's';
+      frag.appendChild(s);
+    }
+    container.appendChild(frag);
+  })();
+
+  // ---- Drifting hearts ----
+  (function generateDrift(){
+    const layer = document.getElementById('drift-layer');
+    const heartSVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10.2-9.2C.3 8.9 1.4 5.6 4.4 4.6c2-.7 4 .1 5.1 1.8l1 1.5.5-1.5c.9-1.7 3.1-2.5 5.1-1.8 3 1 4.1 4.3 2.6 7.2C19.5 16.4 12 21 12 21z"/></svg>';
+    const count = window.innerWidth < 600 ? 6 : 10;
+    for(let i = 0; i < count; i++){
+      const d = document.createElement('div');
+      d.className = 'drift';
+      d.innerHTML = heartSVG;
+      const size = Math.random() * 10 + 10;
+      d.style.width = size + 'px';
+      d.style.height = size + 'px';
+      d.style.left = Math.random() * 100 + 'vw';
+      d.style.animationDuration = (Math.random() * 14 + 16) + 's';
+      d.style.animationDelay = (Math.random() * 18) + 's';
+      layer.appendChild(d);
+    }
+  })();
+
+  // ---- Seal interaction ----
+  const stage = document.getElementById('stage');
+  const sealBtn = document.getElementById('sealBtn');
+  const letterScene = document.getElementById('letterScene');
+  const resealBtn = document.getElementById('resealBtn');
+
+  function openLetter(){
+    sealBtn.classList.add('cracking');
+    sealBtn.setAttribute('aria-disabled', 'true');
+
+    setTimeout(() => {
+      sealBtn.classList.add('breaking');
+    }, 420);
+
+    setTimeout(() => {
+      stage.classList.add('hidden');
+      letterScene.classList.add('visible');
+      letterScene.querySelector('.reseal-btn').focus();
+    }, 900);
+  }
+
+  function closeLetter(){
+    letterScene.classList.remove('visible');
+    stage.classList.remove('hidden');
+    sealBtn.classList.remove('breaking', 'cracking');
+    sealBtn.removeAttribute('aria-disabled');
+    sealBtn.focus();
+  }
+
+  sealBtn.addEventListener('click', openLetter);
+  resealBtn.addEventListener('click', closeLetter);
+</script>
+
+</body>
+</html>
